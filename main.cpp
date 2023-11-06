@@ -34,15 +34,35 @@ void ReadNumber(size_t& number) {
 
 void FillArray(Player* arr, const size_t& players_number) {
     for (size_t i = 0; i < players_number; ++i) {
-        std::cout << "Enter the name for the " << i + 1 << " player: ";
+        std::cout << "\nEnter the name for the " << i + 1 << " player: ";
         std::string name;
         ReadLine(name);
-        arr->SetName(name); //arr[i].SetName(name);
+        arr[i].SetName(name); //(arr + i)->SetName(name);
+        
 
         std::cout << "Enter the number of points for the " << i + 1 << " player: ";
         size_t points;
         ReadNumber(points);
-        arr->SetPoints(points); //arr[i].SetPoints(points);
+        arr[i].SetPoints(points); //(arr + i)->SetPoints(points);
+        
+    }
+}
+
+
+void SortArray(Player* arr, const size_t& players_number, bool isDescending = true) {
+    for (size_t i = 0; i < players_number; ++i) {
+        for (size_t j = 0; j < players_number; ++j) {
+            if(isDescending && arr[i].GetPoints() > arr[j].GetPoints()) {
+                Player temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            } 
+            if (!isDescending && arr[i].GetPoints() < arr[j].GetPoints()) {
+                Player temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
     }
 }
 
@@ -61,6 +81,10 @@ int main() {
     Player* arr = new Player[players_number];
 
     FillArray(arr, players_number);
+    std::cout << "\nArray of players before sorting\n";
+    PrintArray(arr, players_number);
+    SortArray(arr, players_number);
+    std::cout << "\nArray of players after sorting\n";
     PrintArray(arr, players_number);
 
     delete [] arr;
